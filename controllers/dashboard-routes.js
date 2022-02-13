@@ -3,6 +3,7 @@ const withAuth = require('../utils/auth');
 const { Post, User, Comment } = require('../models');
 
 router.get('/', withAuth, (req, res) => {
+  console.info('======================');
   Post.findAll({
     where: {
       // use the ID from the session
@@ -36,6 +37,7 @@ router.get('/', withAuth, (req, res) => {
 });
 
 router.get('/edit/:id', withAuth, (req, res) => {
+  console.info('======================');
   Post.findByPk(req.params.id, {
     attributes: ['id', 'post_url', 'title', 'created_at'],
     include: [

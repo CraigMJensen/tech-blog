@@ -4,7 +4,7 @@ const { Post, User, Comment } = require('../../models');
 
 // Get all users
 router.get('/', (req, res) => {
-  console.log('======================');
+  console.info('======================');
   Post.findAll({
     attributes: ['id', 'post_url', 'title', 'created_at'],
     order: [['created_at', 'DESC']],
@@ -31,6 +31,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', withAuth, (req, res) => {
+  console.info('======================');
   Post.findOne({
     where: {
       id: req.params.id,
@@ -65,6 +66,7 @@ router.get('/:id', withAuth, (req, res) => {
 });
 
 router.post('/', withAuth, (req, res) => {
+  console.info('======================');
   Post.create({
     title: req.body.title,
     post_url: req.body.post_url,
@@ -78,6 +80,7 @@ router.post('/', withAuth, (req, res) => {
 });
 
 router.put('/:id', withAuth, (req, res) => {
+  console.info('======================');
   Post.update(
     {
       title: req.body.title,
@@ -102,6 +105,7 @@ router.put('/:id', withAuth, (req, res) => {
 });
 
 router.delete('/:id', withAuth, (req, res) => {
+  console.info('======================');
   Post.destroy({
     where: {
       id: req.params.id,

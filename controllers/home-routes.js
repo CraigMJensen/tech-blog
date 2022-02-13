@@ -3,6 +3,7 @@ const router = require('express').Router();
 const { User, Post, Comment } = require('../models');
 
 router.get('/', (req, res) => {
+  console.info('======================');
   console.log(req.session);
   Post.findAll({
     attributes: ['id', 'post_url', 'title', 'created_at'],
@@ -34,6 +35,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/login', (req, res) => {
+  console.info('======================');
   if (req.session.loggedIn) {
     res.redirect('/');
     return;
@@ -42,6 +44,7 @@ router.get('/login', (req, res) => {
 });
 
 router.get('/post/:id', (req, res) => {
+  console.info('======================');
   Post.findOne({
     where: {
       id: req.params.id,

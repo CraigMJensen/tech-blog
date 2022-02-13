@@ -3,7 +3,7 @@ const withAuth = require('../../utils/auth');
 const { Comment, User } = require('../../models');
 
 router.get('/', (req, res) => {
-  console.log('======================');
+  console.info('======================');
   Comment.findAll({
     attributes: ['id', 'comment_text', 'user_id', 'post_id', 'created_at'],
     order: [['created_at', 'DESC']],
@@ -22,6 +22,7 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', withAuth, (req, res) => {
+  console.info('======================');
   // check the session
   if (req.session) {
     Comment.create({
@@ -39,6 +40,7 @@ router.post('/', withAuth, (req, res) => {
 });
 
 router.delete('/:id', withAuth, (req, res) => {
+  console.info('======================');
   Comment.destroy({
     where: {
       id: req.params.id,
