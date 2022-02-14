@@ -9,7 +9,7 @@ router.get('/', withAuth, (req, res) => {
       // use the ID from the session
       user_id: req.session.user_id,
     },
-    attributes: ['id', 'post_url', 'title', 'created_at'],
+    attributes: ['id', 'title', 'created_at'],
     include: [
       {
         model: Comment,
@@ -39,7 +39,7 @@ router.get('/', withAuth, (req, res) => {
 router.get('/edit/:id', withAuth, (req, res) => {
   console.info('======================');
   Post.findByPk(req.params.id, {
-    attributes: ['id', 'post_url', 'title', 'created_at'],
+    attributes: ['id', 'title', 'created_at'],
     include: [
       {
         model: Comment,
