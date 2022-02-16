@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const withAuth = require('../../utils/auth');
+// const withAuth = require('../../utils/auth');
 const { Post, User, Comment } = require('../../models');
 
 // Get all users
@@ -30,7 +30,7 @@ router.get('/', (req, res) => {
     });
 });
 
-router.get('/:id', withAuth, (req, res) => {
+router.get('/:id', (req, res) => {
   console.info('======================');
   Post.findOne({
     where: {
@@ -65,7 +65,7 @@ router.get('/:id', withAuth, (req, res) => {
     });
 });
 
-router.post('/', withAuth, (req, res) => {
+router.post('/', (req, res) => {
   console.info('======================');
   Post.create({
     title: req.body.title,
@@ -78,7 +78,7 @@ router.post('/', withAuth, (req, res) => {
     });
 });
 
-router.put('/:id', withAuth, (req, res) => {
+router.put('/:id', (req, res) => {
   console.info('======================');
   Post.update(
     {
@@ -103,7 +103,7 @@ router.put('/:id', withAuth, (req, res) => {
     });
 });
 
-router.delete('/:id', withAuth, (req, res) => {
+router.delete('/:id', (req, res) => {
   console.info('======================');
   Post.destroy({
     where: {
