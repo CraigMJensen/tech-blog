@@ -13,14 +13,14 @@
         <h1>
           <a href='/'>Tech Blog</a>
         </h1>
-        {{!-- <nav>
-          {{#if loggedIn}}
-          <a href='/dashboard'>dashboard</a>
+        <nav>
+          {{!-- {{#if loggedIn}} --}}
+          {{! <a href='/dashboard'>dashboard</a> }}
           <button id='logout' class='btn-no-style'>logout</button>
-          {{else}}
+          {{!-- {{else}} --}}
           <a href='/login'>login</a>
-          {{/if}}
-        </nav> --}}
+          {{!-- {{/if}} --}}
+        </nav>
       </header>
       <main>
         {{{body}}}
@@ -30,9 +30,9 @@
       </footer>
     </div>
 
-    {{!-- {{#if loggedIn}}
+    {{#if loggedIn}}
       <script src='/javascript/logout.js'></script>
-    {{/if}} --}}
+    {{/if}}
   </body>
 
 </html>
