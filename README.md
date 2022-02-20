@@ -32,6 +32,10 @@
 - Sign up for an account
 - Start posting!
 
+## Images
+
+![image of tech blog](db/img/tech-blog.png)
+
 ## License
 
 ![badge](https://img.shields.io/badge/license-MIT-orange)
