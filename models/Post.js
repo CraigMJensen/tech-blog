@@ -3,7 +3,6 @@ const sequelize = require('../config/connection');
 
 class Post extends Model {}
 
-// create fields, columns for Post model
 Post.init(
   {
     id: {
@@ -12,15 +11,22 @@ Post.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    title: {
+    postTitle: {
+      type: DataTypes.STRING(25),
+      allowNull: false,
+      unique: true,
+    },
+    postContent: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
-    blog_text: {
-      type: DataTypes.STRING,
+    dateCreated: {
+      type: DataTypes.DATEONLY,
       allowNull: false,
+      defaultValue: DataTypes.NOW,
     },
-    user_id: {
+    userId: {
       type: DataTypes.INTEGER,
       references: {
         model: 'user',
@@ -30,6 +36,7 @@ Post.init(
   },
   {
     sequelize,
+    timestamps: false,
     freezeTableName: true,
     underscored: true,
     modelName: 'post',

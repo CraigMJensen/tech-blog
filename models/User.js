@@ -2,63 +2,48 @@ const { Model, DataTypes } = require('sequelize');
 const bcrypt = require('bcrypt');
 const sequelize = require('../config/connection');
 
-// Create user model
 class User extends Model {
-  // set up method to run on instance data (per user) to check password
   checkPassword(loginPw) {
     return bcrypt.compareSync(loginPw, this.password);
   }
 }
-
-// Define table columns and configuration
 User.init(
   {
-    // define id column
     id: {
-      // use special Sequelize DataTypes object to provide what type of data it is
       type: DataTypes.INTEGER,
-      // equivalent of SQL's `NOT NULL` option
-      alowNull: false,
-      // instruct that this is primary key
+      allowNull: false,
       primaryKey: true,
-      // turn on auto increment
       autoIncrement: true,
     },
-    // define a username column
     username: {
       type: DataTypes.STRING,
       allowNull: false,
-    },
-    // define an email column
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      // there cannot be any duplicate email values in this table
       unique: true,
-      // if allowNull is set to false, we can run our data through validators before creating data
-      validate: {
-        isEmail: true,
-      },
     },
-    // define a password column
     password: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        // this means the password must be at least 4 characters long
-        len: [4],
+        len: [8],
+        // TO DO! how to check the password lenght?
       },
     },
+    // dateCreated: {
+    //   type: DataTypes.DATEONLY,
+    //   allowNull: false,
+    //   defaultValue: DataTypes.NOW,
+    // },
   },
+
+  // Hooks are automatic methods that run during various phases of the Pass Model lifecycle
+  // In this case, before a Pass is created or updated, we will automatically hash their password
   {
     hooks: {
-      // set up beforeCreate lifecycle 'hook' functionality
-      async beforeCreate(newUserData) {
+      beforeCreate: async (newUserData) => {
         newUserData.password = await bcrypt.hash(newUserData.password, 10);
         return newUserData;
       },
-      // set up beforeUpdate lifecycle 'hook' fuctionality
-      async beforeUpdate(updatedUserData) {
+      beforeUpdate: async (updatedUserData) => {
         updatedUserData.password = await bcrypt.hash(
           updatedUserData.password,
           10
@@ -66,7 +51,6 @@ User.init(
         return updatedUserData;
       },
     },
-
     sequelize,
     timestamps: false,
     freezeTableName: true,

@@ -1,13 +1,12 @@
 module.exports = {
-  format_date: (date) => {
-    return `${new Date(date).getMonth() + 1}/${new Date(
-      date
-    ).getDate()}/${new Date(date).getFullYear()}`;
+  format_time: (date) => {
+    return date.toLocaleTimeString();
   },
-  format_plural: (word, amount) => {
-    if (amount !== 1) {
-      return `${word}s`;
-    }
-    return word;
+  format_date: (date) => {
+    // Using JavaScript Date methods, we get and format the month, date, and year
+    return `${new Date(date).getMonth() + 1}/${new Date(date).getDate()}/${
+      // We add five years to the 'year' value to calculate the end date
+      new Date(date).getFullYear()
+    }`;
   },
 };

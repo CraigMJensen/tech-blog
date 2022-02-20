@@ -1,113 +1,64 @@
 const router = require('express').Router();
-// const withAuth = require('../../utils/auth');
-const { User, Post, Comment } = require('../../models');
+const { User } = require('../../models');
 
-// GET /api/users
-router.get('/', (req, res) => {
-  console.info('======================');
-  // Access User model and run .findAll() method
-  User.findAll({
-    attributes: { exclude: ['password'] },
-  })
-    .then((dbUserData) => res.json(dbUserData))
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json(err);
+// SIGN UP
+
+router.post('/', async (req, res) => {
+  try {
+    const newUser = await User.create({
+      username: req.body.username,
+      password: req.body.password
     });
-});
 
-// GET /api/users/1
-router.get('/:id', (req, res) => {
-  console.info('======================');
-  User.findOne({
-    attributes: { exclude: ['password'] },
-    where: {
-      id: req.params.id,
-    },
-    include: [
-      {
-        model: Post,
-        attributes: ['id', 'title', 'created_at'],
-      },
-      {
-        model: Comment,
-        attributes: ['id', 'comment_text', 'created_at'],
-        include: {
-          model: Post,
-          attributes: ['title'],
-        },
-      },
-      {
-        model: Post,
-        attributes: ['title'],
-      },
-    ],
-  })
-    .then((dbUserData) => {
-      if (!dbUserData) {
-        res.status(404).json({ message: 'No user found with this id' });
-        return;
-      }
-      res.json(dbUserData);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json(err);
-    });
-});
-
-// POST /api/users
-router.post('/', (req, res) => {
-  console.info('======================');
-  // expects {username: '', email: '', password: ''}
-  User.create({
-    username: req.body.username,
-    email: req.body.email,
-    password: req.body.password,
-  }).then((dbUserData) => {
     req.session.save(() => {
-      req.session.user_id = dbUserData.id;
-      req.session.username = dbUserData.username;
+      req.session.userId = newUser.id;
+      req.session.username = newUser.username;
       req.session.loggedIn = true;
 
-      res.json(dbUserData);
+      res.json(newUser);
     });
-  });
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
-// login
-router.post('/login', (req, res) => {
-  console.info('======================');
-  // expects { email, password }
-  User.findOne({
-    where: {
-      email: req.body.email,
-    },
-  }).then((dbUserData) => {
-    if (!dbUserData) {
-      res.status(400).json({ message: 'No user with that email address!' });
+// LOGIN
+
+router.post('/login', async (req, res) => {
+  try {
+    const user = await User.findOne({
+      where: {
+        username: req.body.username,
+      },
+    });
+
+    if (!user) {
+      res.status(400).json({ message: 'No user account found!' });
       return;
     }
 
-    // Verify User
-    const validPassword = dbUserData.checkPassword(req.body.password);
+    const validPassword = user.checkPassword(req.body.password);
+
     if (!validPassword) {
-      res.status(400).json({ message: 'Incorrect password!' });
+      res.status(400).json({ message: 'No user account found!' });
       return;
     }
 
     req.session.save(() => {
-      req.session.user_id = dbUserData.id;
-      req.session.username = dbUserData.username;
+      req.session.userId = user.id;
+      req.session.username = user.username;
       req.session.loggedIn = true;
 
-      res.json({ user: dbUserData, message: 'You are now logged in!' });
+      res.json({ user, message: 'You are now logged in!' });
     });
-  });
+  } catch (err) {
+    res.status(400).json({ message: 'No user account found!' });
+  }
 });
+
+// LOGOUT
 
 router.post('/logout', (req, res) => {
-  console.info('======================');
   if (req.session.loggedIn) {
     req.session.destroy(() => {
       res.status(204).end();
@@ -115,50 +66,6 @@ router.post('/logout', (req, res) => {
   } else {
     res.status(404).end();
   }
-});
-
-// PUT /api/users/1
-router.put('/:id', (req, res) => {
-  console.info('======================');
-  // if req.body has exact key/value pair to match model, you can use req.body instead
-  User.update(req.body, {
-    individualHooks: true,
-    where: {
-      id: req.params.id,
-    },
-  })
-    .then((dbUserData) => {
-      if (!dbUserData[0]) {
-        res.status(404).json({ message: 'No user found with this id' });
-        return;
-      }
-      res.json(dbUserData);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json(err);
-    });
-});
-
-// DELETE /api/users/1
-router.delete('/:id', (req, res) => {
-  console.info('======================');
-  User.destroy({
-    where: {
-      id: req.params.id,
-    },
-  })
-    .then((dbUserData) => {
-      if (!dbUserData) {
-        res.status(404).json({ message: 'No user found with this id' });
-        return;
-      }
-      res.json(dbUserData);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json(err);
-    });
 });
 
 module.exports = router;
