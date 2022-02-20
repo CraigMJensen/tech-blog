@@ -9,6 +9,7 @@
 ## Table of Contents
 
 - [Links](#links)
+- [Installation](#installation)
 - [Usage](#usage)
 - [License](#license)
 
@@ -16,6 +17,14 @@
 
 - https://frozen-citadel-69785.herokuapp.com/
 - https://github.com/CraigMJensen/tech-blog
+
+## Installation
+
+- Download this repository
+- Install node.js, if you don't have it installed
+- Run `npm install` to get the node_modules
+- Change the .env.EXAMPLE file to .env
+- Add MySQL information in the .env file.
 
 ## Usage
 
