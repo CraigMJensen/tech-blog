@@ -1,4 +1,3 @@
-// TECH BLOG - CHECKED, SAME AS REFERENCE
 const path = require('path');
 const express = require('express');
 const session = require('express-session');
@@ -15,7 +14,7 @@ const PORT = process.env.PORT || 3001;
 const hbs = exphbs.create({ helpers });
 
 const sess = {
-  secret: 'Tech blog secret',
+  secret: 'TechBlog',
   cookie: {},
   resave: false,
   saveUninitialized: true,
@@ -35,15 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(routes);
 
-// INSTEAD OF LINE 5:
-// app.use(require('./controllers/'));
-
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}!`);
   sequelize.sync({ force: false });
 });
-
-// SAME AS BELOW:
-// sequelize.sync({ force: false }).then(() => {
-//   app.listen(PORT, () => console.log('Now listening'));
-// });

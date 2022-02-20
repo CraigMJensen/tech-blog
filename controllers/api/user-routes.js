@@ -1,13 +1,11 @@
 const router = require('express').Router();
 const { User } = require('../../models');
 
-// SIGN UP
-
 router.post('/', async (req, res) => {
   try {
     const newUser = await User.create({
       username: req.body.username,
-      password: req.body.password
+      password: req.body.password,
     });
 
     req.session.save(() => {
@@ -21,8 +19,6 @@ router.post('/', async (req, res) => {
     res.status(500).json(err);
   }
 });
-
-// LOGIN
 
 router.post('/login', async (req, res) => {
   try {
@@ -55,8 +51,6 @@ router.post('/login', async (req, res) => {
     res.status(400).json({ message: 'No user account found!' });
   }
 });
-
-// LOGOUT
 
 router.post('/logout', (req, res) => {
   if (req.session.loggedIn) {
